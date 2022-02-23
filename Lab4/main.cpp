@@ -2,6 +2,9 @@
 #include <vector>
 #include <stdlib.h>
 #include <time.h>
+#include <fstream>
+#include <sstream>
+#include <string>
 using namespace std;
 vector<vector<int>> nodes;
 int nnodes;
@@ -9,15 +12,15 @@ void creacionManual();
 void creacionRandom();
 void eliminarNodo(int);
 void printNodes();
+void creacionArchivo();
 int main()
 {
-    creacionRandom();
+    creacionArchivo();
     printNodes();
     nodes.clear();
     return 0;
 
 }
-
 void creacionRandom(){
     vector<int> vec;
     //Random
@@ -100,4 +103,31 @@ void printNodes(){
                     cout << nodes[i][j] << " | ";
             cout << endl;
         }
+}
+void creacionArchivo(){
+    nnodes=0;
+    vector <int>vec;
+    string line;
+    ifstream fin;
+    int num=0;
+    fin.open("matriz.txt");
+    while (fin.good()){
+        nnodes++;
+        getline(fin,line,'\n');
+        for (char i:line){
+            if (i==','){
+                vec.push_back(num);
+                num=0;
+        }
+            else
+                num=num*10+int(i-48);
+
+        }
+        vec.push_back(num);
+        num=0;
+        nodes.push_back(vec);
+        vec.clear();
+    }
+    fin.close();
+
 }
