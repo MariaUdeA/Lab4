@@ -1,100 +1,103 @@
 #include <iostream>
-using namespace std;
 #include <vector>
 #include <stdlib.h>
 #include <time.h>
+using namespace std;
+vector<vector<int>> nodes;
+int nnodes;
+void creacionManual();
+void creacionRandom();
+void eliminarNodo(int);
+void printNodes();
 int main()
 {
-    vector<vector<int>> nodes;
+    creacionRandom();
+    printNodes();
+    nodes.clear();
+    return 0;
+
+}
+
+void creacionRandom(){
     vector<int> vec;
-    /* Random
+    //Random
     srand(time(0));
     //cantidad de nodos random
-    int nnodes=rand()%26+1;
+    nnodes=rand()%10+1;
     for (int i=0;i<nnodes;i++){
         vec.clear();
         if (i>0){
-            int k=0;
-             while(k<nnodes){
-                if (k<i){
-                if (nodes[k][i]<=25){
-                           vec.push_back(nodes[k][i]);
-                           k++;
-                      }}
-                else{
-                 if (i==k){
-                      vec.push_back(0);
-                      k++;
-                     }
-                  else{
+             for(int k=0;k<nnodes;k++){
+                if (k<i)
+                       vec.push_back(nodes[k][i]);
+                else if (i==k)
+                        vec.push_back(0);
+                else
                        vec.push_back(rand()%34);
-                       k++;
-                     }
                 }
-                  }
-              }
+            }
         else{
         for (int j=0;j<nnodes;j++){
-            if (i==j){
+            if (i==j)
                 vec.push_back(0);
-            }
-            else{
+            else
                 vec.push_back(rand()%34);
-            }
             }
         }
         nodes.push_back(vec);
-    }*/
-    /* Ingresar manual
+    }
+}
+void creacionManual(){
+    vector<int> vec;
+    //Ingresar manual
     //cantidad de nodos
-    int nnodes;
     int placeholder;
     cout<<"Numero de nodos a ingresar: ";
     cin>>nnodes;
     for (int i=0;i<nnodes;i++){
-        cout<<"Ingresando nodo "<<char(i+65)<<endl;
-        vec.clear();
-        if (i>0){
-            int k=0;
-             while(k<nnodes){
-                if (k<i){
-                if (nodes[k][i]<=25){
+            cout<<"Ingresando nodo "<<char(i+65)<<endl;
+            vec.clear();
+            if (i>0){
+                 for(int k=0;k<nnodes;k++){
+                    if (k<i)
                            vec.push_back(nodes[k][i]);
-                           k++;
-                      }}
-                else{
-                 if (i==k){
-                      vec.push_back(0);
-                      k++;
-                     }
-                  else{
-                     cout<<"Ingrese el costo de la conexión con el nodo "<<char(k+65)<<" entre 0 y 25, si no quiere ingresar conexion escriba 30";
-                     cin>>placeholder;
-                       vec.push_back(placeholder);
-                       k++;
-                     }
+                    else if (i==k)
+                            vec.push_back(0);
+                    else{
+                        cout<<"Ingrese el costo de la conexión con el nodo "<<char(k+65)<<" entre 0 y 25, si no hay conexion escriba 30: ";
+                        cin>>placeholder;
+                        vec.push_back(placeholder);}
+                    }
                 }
-                  }
-              }
-        else{
-        for (int j=0;j<nnodes;j++){
-            if (i==j){
-                vec.push_back(0);
-            }
             else{
-                cout<<"Ingrese el costo de la conexión con el nodo "<<char(j+65)<<" entre 0 y 25, si no quiere ingresar conexion escriba 30";
-                cin>>placeholder;
-                vec.push_back(placeholder);
+       for (int j=0;j<nnodes;j++){
+                if (i==j)
+                    vec.push_back(0);
+                else {
+                    cout<<"Ingrese el costo de la conexión con el nodo "<<char(j+65)<<" entre 0 y 25, si no hay conexion escriba 30: ";
+                    cin>>placeholder;
+                    vec.push_back(placeholder);
+                }
+                }
             }
-            }
+            nodes.push_back(vec);
         }
-        nodes.push_back(vec);
-    }*/
+}
+void eliminarNodo(int numNodo){
+    nodes.erase(next(nodes.begin(),numNodo));
+    nnodes--;
+    for (int i=0;i<nnodes;i++){
+        nodes[i].erase(next(nodes[i].begin(),numNodo));
+    }
+}
+void printNodes(){
     for (int i = 0; i < nnodes; i++) {
+        cout<<char(i+65)<<" | ";
             for (int j = 0; j < nnodes; j++)
-                cout << nodes[i][j] << " ";
+                if (nodes[i][j]>25)
+                    cout<<"- | ";
+                else
+                    cout << nodes[i][j] << " | ";
             cout << endl;
         }
-    nodes.clear();
-    return 0;
 }
