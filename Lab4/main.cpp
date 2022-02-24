@@ -5,17 +5,20 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <utility>
 #include "functions.h"
 using namespace std;
 vector<vector<int>> nodes;
+vector<vector<int>> orden;
 int nnodes;
-
 int main()
 {
-    creacionManual();
-    printNodes();
-    agregarNodo();
-    printNodes();
+    creacionRandom();
+    printMatrix(nodes);
+    for (int i=0;i<nnodes;i++)
+        orden.push_back(revisarRuta(i));
+    cout<<endl;
+    printMatrix(orden);
     nodes.clear();
     return 0;
 
@@ -98,14 +101,14 @@ void eliminarNodo(int numNodo){
         nodes[i].erase(next(nodes[i].begin(),numNodo));
     }
 }
-void printNodes(){
+void printMatrix(vector<vector<int>>vec){
     for (int i = 0; i < nnodes; i++) {
         cout<<char(i+65)<<" | ";
             for (int j = 0; j < nnodes; j++)
-                if (nodes[i][j]>25)
+                if (vec[i][j]>25)
                     cout<<"- | ";
                 else
-                    cout << nodes[i][j] << " | ";
+                    cout << vec[i][j] << " | ";
             cout << endl;
         }
 }
@@ -172,3 +175,51 @@ bool revisarConexion(vector<int> vec){
     else
         return false;
 }
+void ordenarNodos(){ //Creacion de tabla de enrutamiento
+
+}
+vector<int> revisarRuta(int nodoinicial){ //Costo mínimo ALGORITMO DE DIJKSTRA
+    //V es de 0 a nnodos
+    vector<int> novistos; //Revisar si ya está visto
+    vector<int> costmin; //costo minimo
+    vector<int> predecesor; //vertice predecesor
+    for (int i=0;i<nnodes;i++)
+        novistos.push_back(i);
+    novistos.erase(next(novistos.begin(),nodoinicial));
+    for (int i=0;i<nnodes;i++){
+        if (i!=nodoinicial){
+            costmin.push_back(nodes[nodoinicial][i]);
+            predecesor.push_back(nodoinicial);
+        }
+        else{
+            costmin.push_back(0);
+            predecesor.push_back(nodoinicial);
+        }
+    }
+    for (int i=0;novistos.size()>0;i++){
+        if (i==posminima(novistos)){
+            novistos.erase(next(novistos.begin(),i));
+            int size=novistos.size();
+            for (int j=0;j<size;j++){
+                costmin[novistos[j]]=min(costmin[novistos[j]],costmin[i]+nodes[i][novistos[j]]);
+                if (costmin[novistos[j]]==costmin[i]+nodes[i][novistos[j]]){
+                    predecesor[novistos[j]]=i;
+                }
+            }
+        }
+    }
+    return costmin;
+}
+int posminima(vector<int> vec){
+    int c=0;
+    int min=26;
+    int size=vec.size();
+    for (int i=0; i<size;i++){
+        if (vec[int(i)]<min){
+            c=i;
+            min=vec[i];
+        }
+    }
+    return c;
+}
+
