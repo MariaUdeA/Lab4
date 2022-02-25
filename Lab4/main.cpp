@@ -1,3 +1,8 @@
+/*
+Documentacion del algoritmo de Dijkstra:
+https://es.wikipedia.org/wiki/Algoritmo_de_Dijkstra#Algoritmo
+https://www.ecured.cu/Algoritmo_de_Dijkstra
+*/
 #include <iostream>
 #include <vector>
 #include <stdlib.h>
