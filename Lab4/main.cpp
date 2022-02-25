@@ -40,7 +40,7 @@ int main()
                 cout<<"No se trabaja con menos de dos nodos"<<endl;
             else{
                 char eliminar;
-               cout<<"Elegir nodo a retirar : (De A a "<<char(nnodes-1+65)<<endl;
+               cout<<"Elegir nodo a retirar : (De A a "<<char(nnodes-1+65)<<")"<<endl;
                cin>>eliminar;
                eliminarNodo(int(eliminar-65));
             }
@@ -75,8 +75,8 @@ void creacionRandom(){
     //Random
     srand(time(0));
     //cantidad de nodos random
-    //nnodes=rand()%5+2;
-    nnodes=4;
+    nnodes=rand()%5+2;
+    //nnodes=4;
     for (int i=0;i<nnodes;i++){
         vec.clear();
         if (i==nnodes-1){
@@ -94,6 +94,7 @@ void creacionRandom(){
          }
         else{
         do{
+        vec.clear();
         if (i>0){
              for(int k=0;k<nnodes;k++){
                 if (k<i)
@@ -120,12 +121,15 @@ void creacionRandom(){
     normalizarNodos();
 }
 void creacionManual(){
+    //int c=0;
+    //int placeholder[10]={1,-1,1,-1,1,-1,1}; Pruebas
     vector<int> vec;
     //Ingresar manual
     //cantidad de nodos
     int placeholder;
     cout<<"Numero de nodos a ingresar: ";
-    cin>>nnodes;
+    //cin>>nnodes;
+    nnodes=4;
     for (int i=0;i<nnodes;i++){
         vec.clear();
         if (i==nnodes-1){
@@ -144,6 +148,7 @@ void creacionManual(){
          }
         else{
             do{
+            vec.clear();
             cout<<"Ingresando nodo "<<char(i+65)<<endl;
             if (i>0){
                  for(int k=0;k<nnodes;k++){
@@ -155,6 +160,7 @@ void creacionManual(){
                         cout<<"Ingrese el costo de la conexión con el nodo "<<char(k+65)<<" entre 0 y 25, si no hay conexion escriba -1: ";
                         cin>>placeholder;
                         vec.push_back(placeholder);
+                        //c++;
                     }
                     }
                 }
@@ -166,6 +172,7 @@ void creacionManual(){
                     cout<<"Ingrese el costo de la conexión con el nodo "<<char(j+65)<<" entre 0 y 25, si no hay conexion escriba -1: ";
                     cin>>placeholder;
                     vec.push_back(placeholder);
+                    //c++;
                 }
                 }
             }
