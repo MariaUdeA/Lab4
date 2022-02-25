@@ -14,14 +14,57 @@ vector<vector<int>> rutas;
 int nnodes;
 int main()
 {
-    creacionRandom();
-    normalizarNodos();
-    printMatrix(nodes);
-    cout<<endl;
-    ordenarNodos();
-    printMatrix(orden);
-    cout<<endl;
-    printMatrix(rutas);
+    bool sesion=true;
+    int opcion;
+    char node1;
+    char node2;
+    cout<<"Elegir una creacion de los enrutadores: "<<endl<<"1. Manual"<<endl<<"2. Random"<<endl<<"3. Desde archivo"<<endl;
+    cin>>opcion;
+    (opcion==1)? creacionManual():(opcion==2)? creacionRandom():creacionArchivo();
+    while (sesion){
+        cout<<"Elija una accion: "<<endl<<"1. Ver tabla de topografia"<<endl<<"2. Ver tabla de enrutamiento"<<endl<<"3. Agregar nodo"<<endl<<"4. Eliminar nodo"<<endl<<"5. Ruta minima entre nodos"<<endl<<"6. Valor minimo entre nodos"<<endl<<"7. Salir de sesion"<<endl;
+        cin>>opcion;
+        switch(opcion){
+        case 1: //Ver topografía
+            printMatrix(nodes);
+            break;
+        case 2: //Ver Enrutamiento
+            ordenarNodos();
+            printMatrix(orden);
+            break;
+        case 3: //Agregar nodo
+            agregarNodo();
+            break;
+        case 4: //Eliminar nodo
+            if (nnodes<3)
+                cout<<"No se trabaja con menos de dos nodos"<<endl;
+            else{
+                char eliminar;
+               cout<<"Elegir nodo a retirar : (De A a "<<char(nnodes-1+65)<<endl;
+               cin>>eliminar;
+               eliminarNodo(int(eliminar-65));
+            }
+            break;
+        case 5: //Ruta minima entre a y b
+            ordenarNodos();
+            cout<<"Ingrese los dos nodos entre A y "<<char(nnodes-1+65)<<endl;
+            cin>>node1;
+            cin>>node2;
+            entregarCamino(int(node1-65),int(node2-65));
+            break;
+        case 6: //Costo minimo entre a y b
+            ordenarNodos();
+            cout<<"Ingrese los dos nodos entre A y "<<char(nnodes-1+65)<<endl;
+            cin>>node1;
+            cin>>node2;
+            cout<<"El costo minimo es de "<<orden[int(node1-65)][int(node2-65)]<<endl;
+            break;
+        case 7: //Salir de sesion
+            sesion=false;
+            break;
+        }
+
+    }
     nodes.clear();
     orden.clear();
     return 0;
@@ -32,7 +75,8 @@ void creacionRandom(){
     //Random
     srand(time(0));
     //cantidad de nodos random
-    nnodes=rand()%5+1;
+    //nnodes=rand()%5+2;
+    nnodes=4;
     for (int i=0;i<nnodes;i++){
         vec.clear();
         if (i==nnodes-1){
@@ -73,6 +117,7 @@ void creacionRandom(){
         nodes.push_back(vec);
         }
     }
+    normalizarNodos();
 }
 void creacionManual(){
     vector<int> vec;
@@ -129,6 +174,7 @@ void creacionManual(){
             nodes.push_back(vec);
         }
         }
+    normalizarNodos();
 }
 void eliminarNodo(int numNodo){
     nodes.erase(next(nodes.begin(),numNodo));
@@ -147,6 +193,8 @@ void printMatrix(vector<vector<int>>vec){
                     cout << vec[i][j] << " | ";
             cout << endl;
         }
+    cout<<endl;
+
 }
 void creacionArchivo(){
     nnodes=0;
@@ -187,7 +235,7 @@ void agregarNodo(){
              if (j==nnodes-1)
                  vec.push_back(0);
              else {
-                 cout<<"Ingrese el costo de la conexión con el nodo "<<char(j+65)<<" entre 0 y 25, si no hay conexion escriba 30: ";
+                 cout<<"Ingrese el costo de la conexión con el nodo "<<char(j+65)<<" entre 0 y 25, si no hay conexion escriba -1: ";
                  cin>>placeholder;
                  vec.push_back(placeholder);
              }
@@ -198,7 +246,7 @@ void agregarNodo(){
     for (int i=0;i<nnodes-1;i++){
         nodes[i].push_back(vec[i]);
     }
-    vec.clear();
+    normalizarNodos();
 }
 bool revisarConexion(vector<int> vec){
     int check=0;
@@ -296,4 +344,21 @@ void normalizarNodos(){
             }
         }
     }
+}
+void entregarCamino(int inicio, int final){
+    int placeholder;
+    int paso=inicio;
+    int llegada=final;
+    cout<<"Camino de "<<char(inicio+65)<<" a "<<char(final+65)<<':'<<endl;
+    //cout<<char(paso+65)<<" ";
+    if (rutas[paso][llegada]!=inicio){
+        cout<<char(inicio+65)<<" ";
+    }
+    do{
+        placeholder=llegada;
+        llegada=rutas[paso][llegada];
+        paso=placeholder;
+        cout<<char(llegada+65)<<" ";}
+    while (llegada!=final);
+    //cout<<char(llegada+65)<<" "<<endl;
 }

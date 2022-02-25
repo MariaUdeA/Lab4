@@ -17,4 +17,5 @@ std::vector<int> erasebynumber(std::vector<int> vec, int num);
 bool cinvec(int, std::vector<int>);
 int checkPlace(std::vector<int> vec,int vab);
 void normalizarNodos();
+void entregarCamino(int,int);
 #endif // FUNCTIONS_H
